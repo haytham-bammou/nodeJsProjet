@@ -1,7 +1,11 @@
 const router = require('express').Router();
+const path = require('path');
 const UserRepo = require('../repositories/users');
 router.get('/' , async function (req, res,next) {
     res.send(await UserRepo.getAllUsers());
+})
+router.get('/index.html', (req, res) => {
+    res.sendFile('/home/haytham/Desktop/haythambammou/public/index.html');
 })
 
 router.get('/:id' , async function (req, res, next) { 
@@ -10,6 +14,19 @@ router.get('/:id' , async function (req, res, next) {
     else res.status(400).json({msg:'no req.body with this id '})
 
 })
+router.post('/' , async function(req, res, next){
+    const newUser = req.body;
+    if(req.body.username && req.body.email && req.body.password && req.body.role){
+        UserRepo.addUser(newUser);
+        res.redirect('/');
+    }
+    else{
+        res.status(400).json({msg:'bad request info not provided'})
+        
+    }
+})
+
+
 router.put('/:id', async function (req, res, next) {
     const user = await UserRepo.getUser(req.params.id);
     const mem = {id : req.params.id}
@@ -26,5 +43,6 @@ router.put('/:id', async function (req, res, next) {
         res.json({msg : 'user updated successfully ' , mem});
     }
 })
+
 
 module.exports = router;

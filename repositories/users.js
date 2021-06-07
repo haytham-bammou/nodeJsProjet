@@ -39,6 +39,8 @@ module.exports = {
   },
   addUser(user) {
     const newUser = User.build(user)
+    newUser.createdAt = new Date();
+    newUser.updatedAt = new Date();
     newUser.save();
   },
   updateUser() {}, 

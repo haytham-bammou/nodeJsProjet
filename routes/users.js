@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const path = require('path');
 const UserRepo = require('../repositories/users');
 router.get('/' , async function (req, res,next) {
     res.send(await UserRepo.getAllUsers());

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1" , 
     "start" : "node index" ,
-    "dev" : "nodemon index"
+    "dev" : "nodemon index",
+    "migrate": "sequelize db:drop & sequelize db:create & node ./migrate.js"
   },
   "author": "haytham bammou",
   "license": "ISC",

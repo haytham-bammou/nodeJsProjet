@@ -60,7 +60,7 @@
               $.each(data,(i ,user)=>{
                   let newUser = document.createElement('tr')
                   $('#users').append(newUser)
-                  $('#users tr:last').append(`<td>${user.username}</td>`)      
+                  $('#users tr:last').append(`<td class='filterUser'>${user.username}</td>`)      
                   $('#users tr:last').append(`<td>${user.email}</td>`)      
                   $('#users tr:last').append(`<td>${user.role}</td>`)      
                   $('#users tr:last').append(`<td>${user.createdAt}</td>`)      
@@ -81,7 +81,18 @@
                 password : password,
                 role : role
               }).done();
-          })      
+          })  
+          $('#filter').keyup(e=>{
+            let text = e.target.value
+            let user = $('.filterUser').toArray();
+            $.each(user, (i,username)=>{
+                let userN = username.textContent.toLowerCase();
+                if(userN.indexOf(text) == -1) username.parentElement.style.display = 'none';   
+            })
+          })
+          $('#filter').blur(()=>{
+            location.reload();
+          });    
     </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User , Article , Comment } = require("../models");
 console.log(User.findAll());
 module.exports = {
   getAllUsers() {
@@ -47,5 +47,21 @@ module.exports = {
   deleteUser(id) {
     User.destroy({where: { id: id}})
   },
-  // other methods
+  getArticles(id){
+    return Article.findAll({
+      where : { UserId: id},
+    })
+  },
+  addArticle(article){
+    const newArticle = Article.build(article);
+    newArticle.createdAt = new Date();
+    newArticle.updatedAt = new Date();
+    newArticle.save();
+  },
+  getArticlesComment(id){
+    return Comment.findAll({
+      where : { ArticleId: id}
+    })
+  },
+
 };

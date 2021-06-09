@@ -71,7 +71,7 @@ module.exports = {
             content : faker.lorem.paragraph(),
             createdAt : new Date(),
             updatedAt : new Date(),
-            ArticleId : j+1,
+            ArticleId : ARTID,
             UserId : i+1
           }
           comment.push(objC);

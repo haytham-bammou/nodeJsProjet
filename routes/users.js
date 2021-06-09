@@ -6,12 +6,21 @@ router.get('/' , async function (req, res,next) {
 router.get('/index.html', (req, res) => {
     res.sendFile('/home/haytham/Desktop/haythambammou/public/index.html');
 })
-
 router.get('/:id' , async function (req, res, next) { 
     const member = await UserRepo.getUser(req.params.id);
     if(member.length) res.send(member);
     else res.status(400).json({msg:'no req.body with this id '})
 
+})
+router.get('/comment/api/:id' , async function (req, res,next){
+    res.send(await UserRepo.getArticlesComment(req.params.id))
+})
+
+router.get('/article.html/:id', async function (req, res , next) {
+    res.sendFile('/home/haytham/Desktop/haythambammou/public/article.html');
+}) 
+router.get('/article/api/:id' , async function (req, res, next) {
+    res.send(await UserRepo.getArticles(req.params.id))
 })
 router.post('/' , async function(req, res, next){
     const newUser = req.body;
@@ -23,6 +32,10 @@ router.post('/' , async function(req, res, next){
         res.status(400).json({msg:'bad request info not provided'})
         
     }
+})
+
+router.delete('/:id',async function (req, res, next){
+    UserRepo.deleteUser(req.params.id)
 })
 
 

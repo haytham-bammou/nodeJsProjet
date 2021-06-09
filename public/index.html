@@ -25,7 +25,8 @@
       </header>
       <div class="container">
        <div id="main" class="card card-body">
-        <h2 class="title">Add User</h2>
+        <h2 class="title">Add User <button id="slide" class="btn btn-dark " style="width: 90px;height: 40px;margin-left:20px;">ADD</button></h2>
+        
         <form id="addUser" class="form-inline mb-3" method="POST" action='http://localhost:3000/'>
           <label for="username">username</label>
           <input type="text" class="usr form-control mr-2" id="username">
@@ -37,7 +38,9 @@
           <input type="text" class="usr form-control mr-2" id="role">   
           <input type="submit" class="btn btn-dark" value="Submit">
         </form>
+        <hr>
         <h2 class="title">Users</h2>
+        <div class="input-group mb-3">
         <table class="table">
           <thead class="thead-dark">
             <tr>
@@ -46,10 +49,10 @@
               <th scope="col">role</th>
               <th scope="col">createdAT</th>
               <th scope="col">updatedAT</th>
+              <th scope="col">delete/update</th>
             </tr>
           </thead>
           <tbody id='users'>
-
           </tbody>
         </table>
        </div>
@@ -60,12 +63,35 @@
               $.each(data,(i ,user)=>{
                   let newUser = document.createElement('tr')
                   $('#users').append(newUser)
-                  $('#users tr:last').append(`<td class='filterUser'>${user.username}</td>`)      
+                  $('#users tr:last').append(`<td class='filterUser'><a href='http://localhost:3000/article.html/${user.id}'>${user.username}</a></td>`)      
                   $('#users tr:last').append(`<td>${user.email}</td>`)      
                   $('#users tr:last').append(`<td>${user.role}</td>`)      
                   $('#users tr:last').append(`<td>${user.createdAt}</td>`)      
-                  $('#users tr:last').append(`<td>${user.updatedAt}</td>`)      
-              })
+                  $('#users tr:last').append(`<td>${user.updatedAt}</td>`) 
+                  $('#users tr:last').append(`<button class="deleteUser btn-danger" value="${user.id}"></button>`)
+                  $('#users tr:last').append(`<button class="updateUser btn-danger" value="${user.id}"></button>`)
+                })
+                $(document).on('click','.deleteUser',(e)=>{
+                  let id = e.target.value;
+                  if(confirm(`user with id : ${id} is deleted`)){  
+                    $.ajax({
+                      url: 'http://localhost:3000/'+id,
+                      type: 'DELETE',
+                      success: function(result) {}
+                    });
+                }
+                })
+                $('.updateUser').click((e)=>{
+                  if(confirm(`user with id : ${e.target.value} will be updated with info in form pls check u did fill info to update `)){
+                    $.ajax({
+                      url: 'http://localhost:3000/'+e.target.value,
+                      type: 'PUT',
+                      data:{id: e.target.value , usename : $('#username').val() ,password : $('#password').val() , role : $('#role').val()},
+                      success: function(result) {}
+            
+                    });
+                  }
+                })
           })
           $('#addUser').submit((e)=>{
               e.preventDefault();
@@ -74,13 +100,13 @@
               let password = $('#password').val();
               let role = $('#role').val();
               let url = $('#addUser').attr('action');
-              console.log(username, email, password, role , url);
               $.post(url ,{
                 username : username,
                 email : email,
                 password : password,
                 role : role
               }).done();
+              location.reload();
           })  
           $('#filter').keyup(e=>{
             let text = e.target.value
@@ -93,6 +119,11 @@
           $('#filter').blur(()=>{
             location.reload();
           });    
+          $('#slide').click(()=>{
+            $('#addUser').slideToggle();
+          })
+          $('#addUser').slideUp();
+
     </script>
 </body>
 </html>

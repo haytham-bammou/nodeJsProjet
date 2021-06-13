@@ -22,6 +22,18 @@ router.get('/article.html/:id', async function (req, res , next) {
 router.get('/article/api/:id' , async function (req, res, next) {
     res.send(await UserRepo.getArticles(req.params.id))
 })
+
+router.post('/article/api/:id' , async (req, res, next)=>{
+    const article = req.body;
+    article.UserId = req.params.id;
+    if(article.title && article.content){
+        UserRepo.addArticle(article);
+        res.send(req.body);
+    } else {
+        res.status(400).json({msg : 'info not provided'});
+    }
+})
+
 router.post('/' , async function(req, res, next){
     const newUser = req.body;
     if(req.body.username && req.body.email && req.body.password && req.body.role){
@@ -44,6 +56,7 @@ router.put('/:id', async function (req, res, next) {
     const mem = {id : req.params.id}
     if(!user.length) res.status(400).json({msg:'no members with this id'});
     else {
+        mem.id = req.body.id? req.body.id : user[0].dataValues.id ;
         mem.username = req.body.username? req.body.username : user[0].dataValues.username ;
         mem.email = req.body.email ? req.body.email : user[0].dataValues.email ;
         mem.password = req.body.password ? req.body.password : user[0].dataValues.password ;

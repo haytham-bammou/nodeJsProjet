@@ -20,12 +20,24 @@
       </header>
       <div class="container">
        <div id="main" class="card card-body">
-            
+        <h2 class="title">Add Article <button id="slide" class="btn btn-dark " style="width: 90px;height: 40px;margin-left:20px;">Blog</button></h2>
+        <form id="addArticle" class="form-inline mb-3" method="POST" action="http://localhost:3000/article/api/">
+          <label for="title">title</label>
+          <input type="text" class="usr form-control mr-2" id="title">
+          <label for="email">article</label>
+          <textarea class="form-control" id="content" rows="5" placeholder="exprimer vous ..."></textarea>
+          <input type="submit" class="btn btn-dark" id="add">
+        </form>   
+        <hr>
         </div>
-      </div>  </body>
+      </div>  
+</body>
 <script>
         let urlAr = document.URL.split('/')
         let id = urlAr[urlAr.length-1]
+        $.getJSON('http://localhost:3000/'+id , (data)=>{
+            $('#header-title').text(data[0].username + "'s Profile");
+        })
         $.getJSON('http://localhost:3000/article/api/'+id , (data)=>{
         $.each(data,async function(i ,article){
            let newTitle = document.createElement('h1')
@@ -48,5 +60,20 @@
            })
           })
         })
+        $('#add').click((e) =>{
+          e.preventDefault();
+          let userid = parseInt(id);
+          $.post('http://localhost:3000/article/api/' + id , {
+            title: $('#title').val(),
+            content: $('#content').val(),
+            userId : userid
+          }).done()
+          location.reload();
+        })
+        $('#slide').click(()=>{
+            $('#addArticle').slideToggle();
+          })
+          $('#addArticle').slideUp();
+
 </script>
 </html>
